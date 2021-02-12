@@ -10,13 +10,14 @@ import (
 )
 
 type Lesson struct {
-	markDownRaw string
-	Type        string     `json:"type"`
-	Lang        string     `json:"lang"`
-	XP          int        `json:"xp"`
-	Skill       int        `json:"skill"`
-	Code        LessonCode `json:"code"`
-	HTML        LessonHtml `json:"html"`
+	markDownRaw     string
+	Type            string     `json:"type"`
+	Lang            string     `json:"lang"`
+	XP              int        `json:"xp"`
+	Skill           int        `json:"skill"`
+	PossibleAnswers []string   `json:"possible_answers"`
+	Code            LessonCode `json:"code"`
+	HTML            LessonHtml `json:"html"`
 }
 
 type LessonHtml struct {
@@ -33,13 +34,14 @@ type LessonCode struct {
 }
 
 var (
-	lessonRegexp       = regexp.MustCompile("(?s)`{3}lesson(.*?)`{3}")
-	instructionsRegexp = regexp.MustCompile("(?s)`@instructions(.*?)\\n{2,}")
-	hintsRegexp        = regexp.MustCompile("(?s)`@hint(.*?)\\n{2,}")
-	pecRegexp          = regexp.MustCompile("(?s)`@pre_exercise_code`\n(`{3})(.*?)(`{3})")
-	sampleCodeRegexp   = regexp.MustCompile("(?s)`@sample_code`\n(`{3})(.*?)(`{3})")
-	solutionCodeRegexp = regexp.MustCompile("(?s)`@solution`\n(`{3})(.*?)(`{3})")
-	testCodeRegexp     = regexp.MustCompile("(?s)`@test`\n(`{3})(.*?)(`{3})")
+	lessonRegexp          = regexp.MustCompile("(?s)`{3}lesson(.*?)`{3}")
+	instructionsRegexp    = regexp.MustCompile("(?s)`@instructions(.*?)\\n{2,}")
+	hintsRegexp           = regexp.MustCompile("(?s)`@hint(.*?)\\n{2,}")
+	pecRegexp             = regexp.MustCompile("(?s)`@pre_exercise_code`\n(`{3})(.*?)(`{3})")
+	sampleCodeRegexp      = regexp.MustCompile("(?s)`@sample_code`\n(`{3})(.*?)(`{3})")
+	solutionCodeRegexp    = regexp.MustCompile("(?s)`@solution`\n(`{3})(.*?)(`{3})")
+	testCodeRegexp        = regexp.MustCompile("(?s)`@test`\n(`{3})(.*?)(`{3})")
+	possibleAnswersRegexp = regexp.MustCompile("(?s)`@possible_answers`\n(`{3})(.*?)(`{3})")
 )
 
 func NewLesson(text string) *Lesson {
@@ -57,6 +59,7 @@ func (l *Lesson) Parse() *Lesson {
 	l.contentSolution()
 	l.contentTest()
 
+	l.renderAnswers()
 	l.renderInstructions()
 	l.renderHints()
 	l.renderMarkdown()
@@ -134,6 +137,25 @@ func (l *Lesson) contentSolution() {
 	}
 
 	l.Code.Solution = l.trimCodeBlock(cont, "@solution")
+}
+
+func (l *Lesson) renderAnswers() {
+
+}
+
+func (l *Lesson) contentPossibleAnswers() string {
+	var cont string
+	if cont = possibleAnswersRegexp.FindString(l.markDownRaw); len(cont) == 0 {
+		return ""
+	}
+
+	block := l.trimCodeBlock(cont, "@possible_answers")
+	var possAnswers []string
+	for _, line := range strings.Split(block, "\n") {
+		possAnswers = append(possAnswers, line)
+	}
+
+	return "" // TODO: доделать
 }
 
 // contentPEC возвращает блок текста @pre_exercise_code.
