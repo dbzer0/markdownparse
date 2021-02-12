@@ -19,7 +19,11 @@ func (p *Parser) headerMap(text string) map[string]string {
 			continue
 		}
 
-		k, v := keyValue(line)
+		k, v, err := keyValue(line)
+		if err != nil {
+			continue
+		}
+
 		kv[k] = v
 	}
 

@@ -216,7 +216,10 @@ func (l *Lesson) contentHeader() string {
 // parseHeader заполняет структуру заголовка из блока текста lesson.
 func (l *Lesson) parseHeader() {
 	for _, line := range strings.Split(l.contentHeader(), "\n") {
-		k, v := keyValue(line)
+		k, v, err := keyValue(line)
+		if err != nil {
+			continue
+		}
 
 		switch strings.ToLower(k) {
 		case "type":

@@ -1,11 +1,20 @@
 package lesparse
 
-import "strings"
+import (
+	"errors"
+	"strings"
+)
+
+var ErrKeyValueNotFound = errors.New("key-value not found")
 
 // keyValue из строки вычленяет ключ и значение.
-func keyValue(line string) (string, string) {
+func keyValue(line string) (string, string, error) {
 	kv := strings.SplitN(line, ":", 2)
-	return strings.Trim(kv[0], " "), strings.Trim(kv[1], " ")
+	if len(kv) != 2 {
+		return "", "", ErrKeyValueNotFound
+	}
+
+	return strings.Trim(kv[0], " "), strings.Trim(kv[1], " "), nil
 }
 
 func (p *Parser) blocks(text string) []string {
