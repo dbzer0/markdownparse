@@ -30,7 +30,8 @@ You can also use the IPython Shell interactively by simply typing commands and h
 - Hit _Submit Answer_ to execute the Python script and receive feedback.
 
 `@hint`
-Simply add `print(7 + 10)` in the script on the top-right (not in the Shell) and hit 'Submit Answer'.
+Подсказка 1: Simply add `print(7 + 10)` in the script on the top-right (not in the Shell) and hit 'Submit Answer'.
+Подсказка 2: `print(7 + 10)` in the script on the top-right (not in the Shell) and hit 'Submit Answer'.
 
 `@pre_exercise_code`
 ```{python}

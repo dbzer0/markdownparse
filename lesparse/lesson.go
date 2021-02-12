@@ -10,18 +10,19 @@ import (
 )
 
 type Lesson struct {
-	MarkDown string     `json:"markdown"`
-	Type     string     `json:"type"`
-	Lang     string     `json:"lang"`
-	XP       int        `json:"xp"`
-	Skill    int        `json:"skill"`
-	Code     LessonCode `json:"code"`
-	HTML     LessonHtml `json:"html"`
+	markDownRaw string
+	Type        string     `json:"type"`
+	Lang        string     `json:"lang"`
+	XP          int        `json:"xp"`
+	Skill       int        `json:"skill"`
+	Code        LessonCode `json:"code"`
+	HTML        LessonHtml `json:"html"`
 }
 
 type LessonHtml struct {
 	Instructions string   `json:"instructions"`
 	Hints        []string `json:"hints"`
+	Body         string   `json:"markdown"`
 }
 
 type LessonCode struct {
@@ -33,8 +34,8 @@ type LessonCode struct {
 
 var (
 	lessonRegexp       = regexp.MustCompile("(?s)`{3}lesson(.*?)`{3}")
-	instructionsRegexp = regexp.MustCompile("(?s)`@instructions(.*?)\\n{2,}`")
-	hintsRegexp        = regexp.MustCompile("(?s)`@hint(.*?)\\n{2,}`")
+	instructionsRegexp = regexp.MustCompile("(?s)`@instructions(.*?)\\n{2,}")
+	hintsRegexp        = regexp.MustCompile("(?s)`@hint(.*?)\\n{2,}")
 	pecRegexp          = regexp.MustCompile("(?s)`@pre_exercise_code`\n(`{3})(.*?)(`{3})")
 	sampleCodeRegexp   = regexp.MustCompile("(?s)`@sample_code`\n(`{3})(.*?)(`{3})")
 	solutionCodeRegexp = regexp.MustCompile("(?s)`@solution`\n(`{3})(.*?)(`{3})")
@@ -43,12 +44,14 @@ var (
 
 func NewLesson(text string) *Lesson {
 	return &Lesson{
-		MarkDown: text,
+		markDownRaw: text,
 	}
 }
 
 func (l *Lesson) Parse() *Lesson {
+
 	l.parseHeader()
+
 	l.contentPEC()
 	l.contentSampleCode()
 	l.contentSolution()
@@ -56,8 +59,32 @@ func (l *Lesson) Parse() *Lesson {
 
 	l.renderInstructions()
 	l.renderHints()
+	l.renderMarkdown()
 
 	return l
+}
+
+// contentMarkdown очищает текст от технических блоков, и возвращает
+// чистый Markdown который должен прочитать пользователь.
+func (l *Lesson) contentMarkdown() string {
+	md := l.markDownRaw
+
+	md = lessonRegexp.ReplaceAllString(md, "")
+	md = instructionsRegexp.ReplaceAllString(md, "")
+	md = sampleCodeRegexp.ReplaceAllString(md, "")
+	md = solutionCodeRegexp.ReplaceAllString(md, "")
+	md = testCodeRegexp.ReplaceAllString(md, "")
+	md = pecRegexp.ReplaceAllString(md, "")
+	md = hintsRegexp.ReplaceAllString(md, "")
+	md = strings.ReplaceAll(md, "\n\n\n", "\n")
+
+	return md
+}
+
+// renderMarkdown рендерит очищенный от технических блоков Markdown
+// в HTML контент для пользователя.
+func (l *Lesson) renderMarkdown() {
+	l.HTML.Body = l.htmlRender(l.contentMarkdown())
 }
 
 // renderInstructions построчно рендерит инструкции в HTML.
@@ -92,7 +119,7 @@ func (l *Lesson) htmlRender(text string) string {
 // contentTest находит блок текста @test и обновляет поле Test.
 func (l *Lesson) contentTest() {
 	var cont string
-	if cont = testCodeRegexp.FindString(l.MarkDown); len(cont) == 0 {
+	if cont = testCodeRegexp.FindString(l.markDownRaw); len(cont) == 0 {
 		return
 	}
 
@@ -102,7 +129,7 @@ func (l *Lesson) contentTest() {
 // contentSolution возвращает блок текста @solution.
 func (l *Lesson) contentSolution() {
 	var cont string
-	if cont = solutionCodeRegexp.FindString(l.MarkDown); len(cont) == 0 {
+	if cont = solutionCodeRegexp.FindString(l.markDownRaw); len(cont) == 0 {
 		return
 	}
 
@@ -112,7 +139,7 @@ func (l *Lesson) contentSolution() {
 // contentPEC возвращает блок текста @pre_exercise_code.
 func (l *Lesson) contentPEC() {
 	var cont string
-	if cont = pecRegexp.FindString(l.MarkDown); len(cont) == 0 {
+	if cont = pecRegexp.FindString(l.markDownRaw); len(cont) == 0 {
 		return
 	}
 
@@ -122,7 +149,7 @@ func (l *Lesson) contentPEC() {
 // contentSampleCode возвращает код примераю
 func (l *Lesson) contentSampleCode() {
 	var cont string
-	if cont = sampleCodeRegexp.FindString(l.MarkDown); len(cont) == 0 {
+	if cont = sampleCodeRegexp.FindString(l.markDownRaw); len(cont) == 0 {
 		return
 	}
 
@@ -143,7 +170,7 @@ func (l *Lesson) trimCodeBlock(code, blockID string) string {
 // contentHints возвращает блок текста @hint.
 func (l *Lesson) contentHints() []string {
 	var cont string
-	if cont = hintsRegexp.FindString(l.MarkDown); len(cont) == 0 {
+	if cont = hintsRegexp.FindString(l.markDownRaw); len(cont) == 0 {
 		return []string{}
 	}
 
@@ -162,7 +189,7 @@ func (l *Lesson) contentHints() []string {
 // contentInstructions возвращает блок текста @instructions.
 func (l *Lesson) contentInstructions() string {
 	var cont string
-	if cont = instructionsRegexp.FindString(l.MarkDown); len(cont) == 0 {
+	if cont = instructionsRegexp.FindString(l.markDownRaw); len(cont) == 0 {
 		return ""
 	}
 
@@ -175,7 +202,7 @@ func (l *Lesson) contentInstructions() string {
 // contentHeader возвращает блок текста lesson.
 func (l *Lesson) contentHeader() string {
 	var cont string
-	if cont = lessonRegexp.FindString(l.MarkDown); len(cont) == 0 {
+	if cont = lessonRegexp.FindString(l.markDownRaw); len(cont) == 0 {
 		return ""
 	}
 
