@@ -239,3 +239,35 @@ skills: 2
 Структура кода находится в объекте Code:
 
     chapter.Lessons[0].Code.Test
+
+
+#### Урок: вопросы и ответ
+
+Каждый блок теста определяется по ключевому:
+
+    `@possible_answers`
+
+Блок индекса ответа (индекс от 1):
+
+    `@answer`
+
+Конец блока определяются по пустой строке после.
+
+Пример:
+
+    `@possible_answers`
+    - You want to do some quick calculations.
+    - For your new business, you want to develop a database-driven website.
+    - Your boss asks you to clean and analyze the results of the latest satisfaction survey.
+    - All of the above.
+    
+    `@answer`
+    3
+
+Структура возможных ответов отрендерена в:
+
+    chapter.Lessons[0].HTML.PossibleAnswers
+
+Индекс ответа в:
+
+    chapter.Lessons[0].AnswerIndex

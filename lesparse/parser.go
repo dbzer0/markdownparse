@@ -1,11 +1,9 @@
 package lesparse
 
-type Parser struct {
-}
+type Parser struct{}
 
 func NewParser() *Parser {
-	return &Parser{
-	}
+	return &Parser{}
 }
 
 func (p *Parser) Chapter(text string) *Chapter {
@@ -27,7 +25,7 @@ func (p *Parser) Chapter(text string) *Chapter {
 		blocks = blocks[1:]
 	}
 
-	chapter.PagesCount = len(blocks)
+	chapter.LessonsCount = len(blocks)
 
 	for _, block := range blocks {
 		chapter.Lessons = append(chapter.Lessons, p.Lesson(block))

@@ -1,9 +1,9 @@
 package lesparse
 
 type Chapter struct {
-	Header     *Header  `json:"header"`
-	Lessons    []Lesson `json:"lessons"`
-	PagesCount int      `json:"pages_count"`
+	Header       *Header  `json:"header"`
+	Lessons      []Lesson `json:"lessons"`
+	LessonsCount int      `json:"lessons_count"`
 }
 
 type Header struct {

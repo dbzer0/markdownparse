@@ -82,6 +82,9 @@ Python is a pretty versatile language. For which applications can you use Python
 - Your boss asks you to clean and analyze the results of the latest satisfaction survey.
 - All of the above.
 
+`@answer`
+3
+
 `@hint`
 Hugo mentioned in the video that Python can be used to build practically any piece of software.
 
