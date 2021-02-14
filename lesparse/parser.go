@@ -28,12 +28,12 @@ func (p *Parser) Chapter(text string) *Chapter {
 	chapter.LessonsCount = len(blocks)
 
 	for _, block := range blocks {
-		chapter.Lessons = append(chapter.Lessons, p.Lesson(block))
+		chapter.Lessons = append(chapter.Lessons, p.lesson(block))
 	}
 
 	return &chapter
 }
 
-func (p *Parser) Lesson(text string) Lesson {
+func (p *Parser) lesson(text string) Lesson {
 	return *NewLesson(text).Parse()
 }
