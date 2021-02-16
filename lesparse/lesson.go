@@ -295,7 +295,7 @@ func (l *Lesson) parseHeader() {
 		case "xp":
 			i, _ := strconv.Atoi(v)
 			l.XP = i
-		case "skill":
+		case "skills":
 			i, _ := strconv.Atoi(v)
 			l.Skill = i
 		}
