@@ -10,15 +10,16 @@ import (
 )
 
 type Lesson struct {
-	markDownRaw string
-	Title       string     `json:"title"`
-	Type        string     `json:"type"`
-	Lang        string     `json:"lang"`
-	XP          int        `json:"xp"`
-	Skill       int        `json:"skill"`
-	AnswerIndex int        `json:"answer"`
-	Code        LessonCode `json:"code"`
-	HTML        LessonHtml `json:"html"`
+	markDownRaw     string
+	Title           string     `json:"title"`
+	Type            string     `json:"type"`
+	Lang            string     `json:"lang"`
+	DurationMinutes int        `json:"duration_minutes"`
+	XP              int        `json:"xp"`
+	Skill           int        `json:"skill"`
+	AnswerIndex     int        `json:"answer"`
+	Code            LessonCode `json:"code"`
+	HTML            LessonHtml `json:"html"`
 }
 
 type LessonHtml struct {
@@ -284,6 +285,9 @@ func (l *Lesson) parseHeader() {
 		}
 
 		switch strings.ToLower(k) {
+		case "duration_minutes":
+			i, _ := strconv.Atoi(v)
+			l.DurationMinutes = i
 		case "type":
 			l.Type = v
 		case "lang":

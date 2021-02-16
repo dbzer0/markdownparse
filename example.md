@@ -1,9 +1,10 @@
 ---
-title_meta: 'Глава 1'
-title: 'Основы Python'
-description: 'В этой главе мы расскажем вам о Python. Вы узнаете насколько он клевый.'
+title_meta: Глава 1
+title: Основы Python
+description: В этой главе мы расскажем вам о Python. Вы узнаете насколько он клевый.
+title_image_link: https://example.com/image.jpg
 attachments:
-slides_link: 'https://s3.amazonaws.com/assets.datacamp.com/production/course_735/slides/chapter1.pdf'
+slides_link: https://s3.amazonaws.com/assets.datacamp.com/production/course_735/slides/chapter1.pdf
 free_preview: true
 ---
 
@@ -16,6 +17,7 @@ key: bdc52f0e19
 lang: python
 xp: 100
 skills: 2
+duration_minutes: 10
 ```
 
 In the Python script on the right, you can type Python code to solve the exercises. If you hit _Run Code_ or _Submit Answer_, your python script (`script.py`) is executed and the output is shown in the IPython Shell. _Submit Answer_ checks whether your submission is correct and gives you feedback.

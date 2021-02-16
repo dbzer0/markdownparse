@@ -30,6 +30,21 @@ func (p *Parser) headerMap(text string) map[string]string {
 	return kv
 }
 
+func (p *Parser) attachments(value string) []string {
+	attachments := make([]string, 0)
+
+	for _, attachment := range strings.Split(value, ",") {
+		attachment = strings.TrimSpace(attachment)
+		if attachment == "" {
+			continue
+		}
+
+		attachments = append(attachments, attachment)
+	}
+
+	return attachments
+}
+
 // header формирует из текста структуру заголовка урока.
 func (p *Parser) header(text string) *Header {
 	var header Header
@@ -49,8 +64,7 @@ func (p *Parser) header(text string) *Header {
 		header.Description = v
 	}
 	if v, ok := headerMap["attachments"]; ok {
-		// TODO: оттримить пробелы между запятыми
-		header.Attachments = strings.Split(v, ",")
+		header.Attachments = p.attachments(v)
 	}
 	if v, ok := headerMap["slides_url"]; ok {
 		header.SlidesURL = v
@@ -59,6 +73,9 @@ func (p *Parser) header(text string) *Header {
 		if v == "true" {
 			header.FreePreview = true
 		}
+	}
+	if v, ok := headerMap["title_image_link"]; ok {
+		header.TitleImageURL = v
 	}
 
 	return &header

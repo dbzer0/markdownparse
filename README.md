@@ -41,11 +41,12 @@
 Пример:
 
     ---
-    title_meta: 'Глава 1'
-    title: 'Основы Python'
-    description: 'В этой главе мы расскажем вам о Python. Вы узнаете насколько он клевый.'
+    title_meta: Глава 1
+    title: Основы Python
+    title_image_link: https://example.com/image.jpg
+    description: В этой главе мы расскажем вам о Python. Вы узнаете насколько он клевый.
     attachments:
-    slides_link: 'https://s3.amazonaws.com/assets.datacamp.com/production/course_735/slides/chapter1.pdf'
+    slides_link: https://s3.amazonaws.com/assets.datacamp.com/production/course_735/slides/chapter1.pdf
     free_preview: true
     ---
 
