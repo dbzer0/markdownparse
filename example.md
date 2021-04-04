@@ -95,6 +95,24 @@ Hugo mentioned in the video that Python can be used to build practically any pie
 
 ```
 
+`@instructions`
+- Вася решил написать программу, которая сосчитает количество часов в году, но у него никак не получается. Исправьте программу так, чтобы она вывела правильный результат:
+
+    package main
+
+    import "fmt"
+
+    func main() {
+        for i := 1; i <= 365; i++ {
+            var hours int
+            hours += i * 24
+        }
+        
+        fmt.Println("Количество часов в году", hours)
+    }
+
+- Вася классный.
+
 `@test`
 ```{python}
 msg1 = "Incorrect. Python can do simple and quick calculations, but it is much more than that!"

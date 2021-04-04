@@ -38,7 +38,7 @@ type LessonCode struct {
 
 var (
 	lessonRegexp          = regexp.MustCompile("(?s)`{3}lesson(.*?)`{3}")
-	instructionsRegexp    = regexp.MustCompile("(?s)`@instructions(.*?)\\n{2,}")
+	instructionsRegexp    = regexp.MustCompile("(?s)`@instructions(.*?)\\.\\n{2}")
 	hintsRegexp           = regexp.MustCompile("(?s)`@hint(.*?)\\n{2,}")
 	pecRegexp             = regexp.MustCompile("(?s)`@pre_exercise_code`\n(`{3})(.*?)(`{3})")
 	sampleCodeRegexp      = regexp.MustCompile("(?s)`@sample_code`\n(`{3})(.*?)(`{3})")
