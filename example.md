@@ -111,7 +111,7 @@ Hugo mentioned in the video that Python can be used to build practically any pie
         fmt.Println("Количество часов в году", hours)
     }
 
-- Вася классный.
+- Вася классный. 
 
 `@test`
 ```{python}
